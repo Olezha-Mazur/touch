@@ -6,7 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		777FAB062F640FB600FA8EE6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 777FAB052F640FB600FA8EE6 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		777FAB052F640FB600FA8EE6 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		77C673392F58F4BB00E30E5F /* touch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = touch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -45,6 +50,7 @@
 		77C673302F58F4BB00E30E5F = {
 			isa = PBXGroup;
 			children = (
+				777FAB052F640FB600FA8EE6 /* README.md */,
 				77C6733B2F58F4BB00E30E5F /* touch */,
 				77C6733A2F58F4BB00E30E5F /* Products */,
 			);
@@ -122,6 +128,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				777FAB062F640FB600FA8EE6 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
