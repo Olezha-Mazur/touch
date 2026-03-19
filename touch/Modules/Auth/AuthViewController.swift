@@ -36,11 +36,11 @@ final class AuthViewController: UIViewController {
     }
     
     @objc private func didTapLogin() {
-        let email = customView.emailField.text ?? ""
-        let pass = customView.passwordField.text ?? ""
+        let email = customView.emailField.text
+        let pass = customView.passwordField.text
         customView.errorLabel.isHidden = true
         view.endEditing(true)
-        viewModel.login(email: email, pass: pass)
+        viewModel.login(emailO: email, passO: pass)
     }
 
     private func setupBindings() {

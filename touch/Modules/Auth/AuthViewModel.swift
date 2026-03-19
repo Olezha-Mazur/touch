@@ -17,7 +17,9 @@ final class AuthViewModel: AuthViewModelProtocol {
         self.router = router
     }
     
-    func login(email: String, pass: String) {
+    func login(emailO: String?, passO: String?) {
+        let email = emailO ?? ""
+        let pass = passO ?? ""
         onStateChange?(.loading)
         DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
@@ -36,7 +38,7 @@ final class AuthViewModel: AuthViewModelProtocol {
         }
     }
     
-    func register(email: String, pass: String) {
+    func register(emailO: String?, passO: String?) {
     }
 }
 

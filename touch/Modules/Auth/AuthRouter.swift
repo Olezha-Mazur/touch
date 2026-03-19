@@ -18,13 +18,15 @@ final class AuthRouter: AuthRouterProtocol {
         let mainTabBar = MainTabBarController(window: self.window)
         
         window?.rootViewController = mainTabBar
-
+        
         if let window = window {
-            UIView.transition(with: window,
-                              duration: 0.3,
-                              options: .transitionCrossDissolve,
-                              animations: nil,
-                              completion: nil)
+            UIView.transition(
+                with: window,
+                duration: 0.3,
+                options: .transitionCrossDissolve,
+                animations: nil,
+                completion: nil
+            )
         }
     }
 }
