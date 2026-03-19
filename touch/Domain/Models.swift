@@ -6,6 +6,11 @@
 //
 import Foundation
 
+enum AuthError: Error {
+    case invalidCredentials
+    case emptyFields
+}
+
 struct LoginRequest {
     let email: String
     let pass: String
