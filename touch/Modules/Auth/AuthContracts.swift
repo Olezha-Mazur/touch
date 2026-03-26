@@ -14,8 +14,8 @@ enum AuthViewState {
 }
 
 protocol AuthViewModelProtocol {
-    func login(email: String, pass: String)
-    func register(email: String, pass: String)
+    func login(emailO: String?, passO: String?)
+    func register(emailO: String?, passO: String?)
     var onStateChange: ((AuthViewState) -> Void)? { get set }
 }
 
