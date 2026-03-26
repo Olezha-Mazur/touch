@@ -23,8 +23,10 @@ final class MainTabBarController: UITabBarController {
         view.backgroundColor = .systemBackground
         tabBar.backgroundColor = .systemGray6
         
+        let networkClient = URLSessionNetworkClient()
         let feedRouter = FeedRouter(navigationController: nil)
-        let feedVM = FeedViewModel(service: FeedService(), router: feedRouter)
+        let feedService = FeedService(networkClient: networkClient)
+        let feedVM = FeedViewModel(service: feedService, router: feedRouter)
         let feedVC = FeedViewController(viewModel: feedVM)
         
         let feedNav = UINavigationController(rootViewController: feedVC)
