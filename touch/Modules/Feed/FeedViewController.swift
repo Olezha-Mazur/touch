@@ -10,7 +10,7 @@ import UIKit
 final class FeedViewController: UIViewController {
     private lazy var customView = FeedView()
     private var viewModel: FeedViewModelProtocol
-    private var items: [FeedUIItem] = []
+    private let listManager = FeedListManager()
     
     init(viewModel: FeedViewModelProtocol) {
         self.viewModel = viewModel
@@ -25,8 +25,23 @@ final class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Лента"
+        
+        setupTableManager()
+        setupActions()
         setupBindings()
+        
         viewModel.loadData()
+    }
+    
+    private func setupTableManager() {
+        customView.tableView.dataSource = listManager
+        customView.tableView.delegate = listManager
+        listManager.delegate = self
+    }
+    
+    private func setupActions() {
+        customView.refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+        customView.retryButton.addTarget(self, action: #selector(didTapRetry), for: .touchUpInside)
     }
     
     private func setupBindings() {
@@ -39,60 +54,64 @@ final class FeedViewController: UIViewController {
         viewModel.refreshData()
     }
     
-    // тут пока поставил заглушки состояния, но эти принты в 5ой лабе поменяются на изменения вьюхи
+    @objc private func didTapRetry() {
+        viewModel.loadData()
+    }
+    
+    private func hideAllUI() {
+        customView.tableView.isHidden = true
+        customView.activityIndicator.stopAnimating()
+        customView.messageLabel.isHidden = true
+        customView.retryButton.isHidden = true
+    }
+    
     private func render(_ state: FeedViewState) {
+        hideAllUI()
+        
         switch state {
         case .idle:
             print("[FEED] Состояние: Ожидание")
             break
             
         case .loading:
-            print("[FEED] Состояние: Загрузка первой страницы...")
-            if items.isEmpty {
+            customView.activityIndicator.startAnimating()
+            
+        case .content(let loadedItems, let isPaginating):
+            customView.tableView.isHidden = false
+            customView.refreshControl.endRefreshing()
+            
+            listManager.update(items: loadedItems)
+            customView.tableView.reloadData()
+            
+            if isPaginating {
+                customView.tableView.tableFooterView = customView.createPaginationFooter()
+            } else {
+                customView.tableView.tableFooterView = nil
             }
             
-        case .content(let loadedItems, _):
-            self.items = loadedItems
-            print("[FEED] Состояние: Контент загружен. Постов: \(items.count)")
-            
         case .empty:
-            print("[FEED] Состояние: Пусто (постов нет)")
+            customView.messageLabel.text = "Здесь пока нет постов"
+            customView.messageLabel.isHidden = false
+            customView.refreshControl.endRefreshing()
             
         case .error(let message):
-            print("[FEED] Состояние: Ошибка - \(message)")
+            customView.messageLabel.text = message
+            customView.messageLabel.isHidden = false
+            customView.retryButton.isHidden = false
+            customView.refreshControl.endRefreshing()
         }
     }
-
 }
 
-extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
-    }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath)
-        let item = items[indexPath.row]
-        var content = cell.defaultContentConfiguration()
-        content.text = item.title
-        content.textProperties.font = .boldSystemFont(ofSize: 16)
-        
-        content.secondaryText = item.bodyPreview
-        content.secondaryTextProperties.numberOfLines = 3
-        
-        cell.contentConfiguration = content
-        return cell
-    }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        viewModel.didSelectPost(id: items[indexPath.row].id)
+extension FeedViewController: FeedListManagerDelegate {
+    func didSelectPost(id: String) {
+        viewModel.didSelectPost(id: id)
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == items.count - 2 {
-            viewModel.loadNextPage()
-        }
+    func scrolledNearBottom() {
+        viewModel.loadNextPage()
     }
 }
 
