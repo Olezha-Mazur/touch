@@ -40,9 +40,9 @@ final class FeedViewController: UIViewController {
     }
     
     private func setupActions() {
-        customView.refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
-        customView.retryButton.addTarget(self, action: #selector(didTapRetry), for: .touchUpInside)
-    }
+            customView.refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+            customView.stateView.retryButton.addTarget(self, action: #selector(didTapRetry), for: .touchUpInside)
+        }
     
     private func setupBindings() {
         viewModel.onStateChange = { [weak self] state in
@@ -61,9 +61,9 @@ final class FeedViewController: UIViewController {
     private func hideAllUI() {
         customView.tableView.isHidden = true
         customView.activityIndicator.stopAnimating()
-        customView.messageLabel.isHidden = true
-        customView.retryButton.isHidden = true
+        customView.stateView.isHiddenWhenEmpty = true
     }
+
     
     private func render(_ state: FeedViewState) {
         hideAllUI()
@@ -90,15 +90,17 @@ final class FeedViewController: UIViewController {
             }
             
         case .empty:
-            customView.messageLabel.text = "Здесь пока нет постов"
-            customView.messageLabel.isHidden = false
-            customView.refreshControl.endRefreshing()
             
-        case .error(let message):
-            customView.messageLabel.text = message
-            customView.messageLabel.isHidden = false
-            customView.retryButton.isHidden = false
-            customView.refreshControl.endRefreshing()
+                customView.stateView.configure(message: "Здесь пока нет постов")
+                customView.stateView.retryButton.isHidden = true
+                customView.stateView.isHiddenWhenEmpty = false
+                customView.refreshControl.endRefreshing()
+                
+            case .error(let message):
+                customView.stateView.configure(message: message)
+                customView.stateView.retryButton.isHidden = false
+                customView.stateView.isHiddenWhenEmpty = false
+                customView.refreshControl.endRefreshing()
         }
     }
 }

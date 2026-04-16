@@ -50,27 +50,21 @@ final class AuthViewController: UIViewController {
     }
     
     private func render(_ state: AuthViewState) {
-        switch state {
-        case .initial:
-            customView.loginButton.isEnabled = true
-            customView.loginButton.setTitle("Войти", for: .normal)
-            customView.errorLabel.isHidden = true
-            customView.activityIndicator.stopAnimating()
-            
-        case .loading:
-            customView.loginButton.isEnabled = false
-            customView.loginButton.setTitle("", for: .normal)
-            customView.activityIndicator.startAnimating()
-            customView.errorLabel.isHidden = true
-            
-        case .error(let message):
-            customView.loginButton.isEnabled = true
-            customView.loginButton.setTitle("Войти", for: .normal)
-            customView.activityIndicator.stopAnimating()
-            customView.errorLabel.text = message
-            customView.errorLabel.isHidden = false
+            switch state {
+            case .initial:
+                customView.loginButton.setIsLoading(false)
+                customView.errorLabel.isHiddenWhenEmpty = true
+                
+            case .loading:
+                customView.loginButton.setIsLoading(true)
+                customView.errorLabel.isHiddenWhenEmpty = true
+                
+            case .error(let message):
+                customView.loginButton.setIsLoading(false)
+                customView.errorLabel.text = message
+                customView.errorLabel.isHiddenWhenEmpty = false
+            }
         }
-    }
 
     private func setupKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)

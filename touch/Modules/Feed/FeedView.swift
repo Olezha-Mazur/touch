@@ -9,14 +9,11 @@ import UIKit
 
 final class FeedView: UIView {
     
-    let refreshControl: UIRefreshControl = {
-        let control = UIRefreshControl()
-        return control
-    }()
+    let refreshControl = UIRefreshControl()
     
     let tableView: UITableView = {
         let table = UITableView()
-        table.backgroundColor = .systemBackground
+        table.backgroundColor = DS.Colors.background
         table.translatesAutoresizingMaskIntoConstraints = false
         table.register(UITableViewCell.self, forCellReuseIdentifier: "PostCell")
         return table
@@ -24,34 +21,17 @@ final class FeedView: UIView {
 
     let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = DS.Colors.primary
         indicator.hidesWhenStopped = true
         indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
     }()
     
-    let messageLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .medium)
-        label.textColor = .secondaryLabel
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.isHiddenWhenEmpty = true 
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let retryButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Повторить", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
-        button.isHidden = true
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    let stateView = DSErrorView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .systemBackground
+        backgroundColor = DS.Colors.background
         tableView.refreshControl = refreshControl
         setupLayout()
     }
@@ -61,8 +41,9 @@ final class FeedView: UIView {
     private func setupLayout() {
         addSubview(tableView)
         addSubview(activityIndicator)
-        addSubview(messageLabel)
-        addSubview(retryButton)
+        addSubview(stateView)
+        
+        stateView.isHiddenWhenEmpty = true
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: topAnchor),
@@ -73,19 +54,17 @@ final class FeedView: UIView {
             activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
             
-            messageLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            messageLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -20),
-            messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
-            messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
-            
-            retryButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 16),
-            retryButton.centerXAnchor.constraint(equalTo: centerXAnchor)
+            stateView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            stateView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            stateView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stateView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
     
     func createPaginationFooter() -> UIView {
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: bounds.width, height: 50))
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: bounds.width, height: DS.Spacing.controlHeight))
         let spinner = UIActivityIndicatorView(style: .medium)
+        spinner.color = DS.Colors.primary
         spinner.center = footerView.center
         spinner.startAnimating()
         footerView.addSubview(spinner)
