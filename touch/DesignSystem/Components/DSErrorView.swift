@@ -26,7 +26,7 @@ final class DSErrorView: UIView {
         return label
     }()
     
-    let retryButton = DSButton(style: .primary)
+    let retryButton = DSButton()
     
     init() {
         super.init(frame: .zero)

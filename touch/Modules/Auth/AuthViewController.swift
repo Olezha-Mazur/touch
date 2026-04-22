@@ -29,6 +29,7 @@ final class AuthViewController: UIViewController {
         setupBindings()
         setupKeyboardObservers()
         setupHideKeyboardOnTap()
+        render(.initial)
     }
     
     private func setupActions() {
@@ -50,21 +51,39 @@ final class AuthViewController: UIViewController {
     }
     
     private func render(_ state: AuthViewState) {
-            switch state {
-            case .initial:
-                customView.loginButton.setIsLoading(false)
-                customView.errorLabel.isHiddenWhenEmpty = true
-                
-            case .loading:
-                customView.loginButton.setIsLoading(true)
-                customView.errorLabel.isHiddenWhenEmpty = true
-                
-            case .error(let message):
-                customView.loginButton.setIsLoading(false)
-                customView.errorLabel.text = message
-                customView.errorLabel.isHiddenWhenEmpty = false
-            }
+        switch state {
+        case .initial:
+            let buttonConfig = DSButton.Configuration(
+                title: "Войти",
+                style: .primary,
+                isLoading: false,
+                isEnabled: true
+            )
+            customView.loginButton.configure(with: buttonConfig)
+            customView.errorLabel.isHiddenWhenEmpty = true
+            
+        case .loading:
+            let buttonConfig = DSButton.Configuration(
+                title: "Войти",
+                style: .primary,
+                isLoading: true,
+                isEnabled: true
+            )
+            customView.loginButton.configure(with: buttonConfig)
+            customView.errorLabel.isHiddenWhenEmpty = true
+            
+        case .error(let message):
+            let buttonConfig = DSButton.Configuration(
+                title: "Войти",
+                style: .primary,
+                isLoading: false,
+                isEnabled: true
+            )
+            customView.loginButton.configure(with: buttonConfig)
+            customView.errorLabel.text = message
+            customView.errorLabel.isHiddenWhenEmpty = false
         }
+    }
 
     private func setupKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)

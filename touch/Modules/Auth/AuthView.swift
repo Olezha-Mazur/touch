@@ -32,7 +32,7 @@ final class AuthView: UIView {
     
     let emailField = DSTextField(placeholderText: "Логин (admin)")
     let passwordField = DSTextField(placeholderText: "Пароль (1234)", isSecure: true)
-    let loginButton = DSButton(style: .primary)
+    let loginButton = DSButton()
     
     let errorLabel: UILabel = {
         let label = UILabel()
