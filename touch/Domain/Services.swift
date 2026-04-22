@@ -13,7 +13,7 @@ protocol AuthServiceProtocol {
 }
 
 protocol FeedServiceProtocol {
-    func getPosts() throws -> [Post]
+    func getPosts(page: Int, limit: Int) async throws -> [Post]
 }
 
 protocol ProfileServiceProtocol {
