@@ -29,6 +29,7 @@ final class AuthViewController: UIViewController {
         setupBindings()
         setupKeyboardObservers()
         setupHideKeyboardOnTap()
+        render(.initial)
     }
     
     private func setupActions() {
@@ -52,23 +53,35 @@ final class AuthViewController: UIViewController {
     private func render(_ state: AuthViewState) {
         switch state {
         case .initial:
-            customView.loginButton.isEnabled = true
-            customView.loginButton.setTitle("Войти", for: .normal)
-            customView.errorLabel.isHidden = true
-            customView.activityIndicator.stopAnimating()
+            let buttonConfig = DSButton.Configuration(
+                title: "Войти",
+                style: .primary,
+                isLoading: false,
+                isEnabled: true
+            )
+            customView.loginButton.configure(with: buttonConfig)
+            customView.errorLabel.isHiddenWhenEmpty = true
             
         case .loading:
-            customView.loginButton.isEnabled = false
-            customView.loginButton.setTitle("", for: .normal)
-            customView.activityIndicator.startAnimating()
-            customView.errorLabel.isHidden = true
+            let buttonConfig = DSButton.Configuration(
+                title: "Войти",
+                style: .primary,
+                isLoading: true,
+                isEnabled: true
+            )
+            customView.loginButton.configure(with: buttonConfig)
+            customView.errorLabel.isHiddenWhenEmpty = true
             
         case .error(let message):
-            customView.loginButton.isEnabled = true
-            customView.loginButton.setTitle("Войти", for: .normal)
-            customView.activityIndicator.stopAnimating()
+            let buttonConfig = DSButton.Configuration(
+                title: "Войти",
+                style: .primary,
+                isLoading: false,
+                isEnabled: true
+            )
+            customView.loginButton.configure(with: buttonConfig)
             customView.errorLabel.text = message
-            customView.errorLabel.isHidden = false
+            customView.errorLabel.isHiddenWhenEmpty = false
         }
     }
 

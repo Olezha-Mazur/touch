@@ -24,67 +24,33 @@ final class AuthView: UIView {
     
     let titleLabel: UILabel = {
         let label = UILabel()
+        label.apply(.title1)
         label.text = "Вход"
-        label.font = .systemFont(ofSize: 32, weight: .bold)
         label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let emailField: UITextField = {
-        let field = UITextField()
-        field.placeholder = "Логин (admin)"
-        field.borderStyle = .roundedRect
-        field.autocapitalizationType = .none
-        field.keyboardType = .emailAddress
-        field.returnKeyType = .next
-        field.translatesAutoresizingMaskIntoConstraints = false
-        return field
-    }()
-    
-    let passwordField: UITextField = {
-        let field = UITextField()
-        field.placeholder = "Пароль (1234)"
-        field.borderStyle = .roundedRect
-        field.isSecureTextEntry = true
-        field.returnKeyType = .done
-        field.translatesAutoresizingMaskIntoConstraints = false
-        return field
-    }()
+    let emailField = DSTextField(placeholderText: "Логин (admin)")
+    let passwordField = DSTextField(placeholderText: "Пароль (1234)", isSecure: true)
+    let loginButton = DSButton()
     
     let errorLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .systemRed
-        label.font = .systemFont(ofSize: 14)
+        label.apply(.error)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.isHidden = true
-        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHiddenWhenEmpty = true
         return label
-    }()
-    
-    let loginButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Войти", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 10
-        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-
-    let activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.color = .white
-        indicator.hidesWhenStopped = true
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        return indicator
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .systemBackground
+        backgroundColor = DS.Colors.background
+        
+        emailField.keyboardType = .emailAddress
+        emailField.returnKeyType = .next
+        passwordField.returnKeyType = .done
+        
         setupLayout()
     }
     required init?(coder: NSCoder) { fatalError() }
@@ -95,11 +61,10 @@ final class AuthView: UIView {
         
         let stackView = UIStackView(arrangedSubviews: [titleLabel, emailField, passwordField, errorLabel, loginButton])
         stackView.axis = .vertical
-        stackView.spacing = 16
+        stackView.spacing = DS.Spacing.m
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(stackView)
-        loginButton.addSubview(activityIndicator)
         
         let contentGuide = scrollView.contentLayoutGuide
         let frameGuide = scrollView.frameLayoutGuide
@@ -118,19 +83,15 @@ final class AuthView: UIView {
             contentView.widthAnchor.constraint(equalTo: frameGuide.widthAnchor),
             contentView.heightAnchor.constraint(greaterThanOrEqualTo: frameGuide.heightAnchor),
             
-            stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -30),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
+            stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -DS.Spacing.xl),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: DS.Spacing.xl),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -DS.Spacing.xl),
             
-            emailField.heightAnchor.constraint(equalToConstant: 48),
-            passwordField.heightAnchor.constraint(equalToConstant: 48),
-            loginButton.heightAnchor.constraint(equalToConstant: 50),
-            
-            activityIndicator.centerXAnchor.constraint(equalTo: loginButton.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: loginButton.centerYAnchor)
+            emailField.heightAnchor.constraint(equalToConstant: DS.Spacing.controlHeight),
+            passwordField.heightAnchor.constraint(equalToConstant: DS.Spacing.controlHeight),
+            loginButton.heightAnchor.constraint(equalToConstant: DS.Spacing.controlHeight)
         ])
     }
-
 }
 
 
