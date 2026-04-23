@@ -15,5 +15,10 @@ final class FeedRouter: FeedRouterProtocol {
     }
     
     func routeToPostDetails(postId: String) {
+        let bduiService = BDUIService()
+        let bduiVM = BDUIViewModel(service: bduiService)
+        let bduiVC = BDUIViewController(viewModel: bduiVM)
+        bduiVC.title = "Пост \(postId)"
+        navigationController?.pushViewController(bduiVC, animated: true)
     }
 }
