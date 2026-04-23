@@ -14,7 +14,6 @@ enum BDUIElementType: String, Decodable {
     case button
     case textField
     case image
-    case errorView
     case spacer
 }
 

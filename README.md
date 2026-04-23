@@ -147,4 +147,4 @@ DTO не пересекает границы слоя бизнес-логики.
 
 ### Дополнительные задания
 * **Actions:** В `BDUIActionHandler` расписаны реакции на описанные в пункте 2 экшены
-* **Расширенная дизайн-система:** Маппер поддерживает 8 компонентов: `contentView`, `stackView`, `label`, `button`, `textField`, `image`, `errorView`, `spacer`.
+* **Расширенная дизайн-система:** Маппер поддерживает 8 компонентов: `contentView`, `stackView`, `label`, `button`, `textField`, `image`, `spacer`.
