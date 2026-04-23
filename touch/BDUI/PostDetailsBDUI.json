@@ -1,0 +1,54 @@
+{
+    "type": "contentView",
+    "content": {
+        "backgroundColor": "background"
+    },
+    "subviews": [
+        {
+            "type": "stackView",
+            "content": { "axis": "vertical", "spacing": "m" },
+            "subviews": [
+                {
+                    "type": "image",
+                    "content": { "systemImage": "server.rack" }
+                },
+                {
+                    "type": "label",
+                    "content": { "text": "Тест экшенов BDUI", "textStyle": "title1" }
+                },
+                {
+                    "type": "label",
+                    "content": { "text": "Ниже представлены кнопки для тестирования каждого из трех типов экшенов, прописанных в ActionHandler'е.", "textStyle": "body" }
+                },
+                {
+                    "type": "spacer"
+                },
+                {
+                    "type": "button",
+                    "content": { "text": "Перейти в Профиль", "buttonStyle": "primary" },
+                    "action": {
+                        "type": "route",
+                        "context": { "screen": "profile" }
+                    }
+                },
+                {
+                    "type": "button",
+                    "content": { "text": "Тест Релоада (.reload)", "buttonStyle": "secondary" },
+                    "action": {
+                        "type": "reload"
+                    }
+                },
+                {
+                    "type": "button",
+                    "content": { "text": "Тест Принта (.print)", "buttonStyle": "secondary" },
+                    "action": {
+                        "type": "print",
+                        "context": { "message": "Принт работает отлично" }
+                    }
+                }
+            ]
+        }
+    ]
+}
+
+
